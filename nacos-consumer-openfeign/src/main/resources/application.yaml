@@ -1,0 +1,46 @@
+server:
+  port: 9102
+spring:
+  application:
+    name: nacos-consumer-openfeign
+  cloud:
+    nacos:
+      # Nacos 3.x:客户端/OpenAPI 端口是 8848,控制台是 8080
+      # 地址通过环境变量覆盖,避免把环境相关配置写死
+      server-addr: "${NACOS_SERVER_ADDR:127.0.0.1:8848}"
+
+      # 服务端开启鉴权后才需要
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:waver}
+
+      discovery:
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+        # 多环境隔离。public 命名空间的 ID 为空;自建命名空间填 namespace ID
+        # namespace: ${NACOS_NAMESPACE:}
+        # 多网卡/容器环境自动探测 IP 不对时手动指定
+        # ip: ${NACOS_REGISTER_IP:}
+        # 实例权重,配合负载均衡和灰度发布使用
+        # weight: 1.0
+        # 自定义元数据,可用于版本路由、灰度标记
+        # metadata:
+        #   version: 1.0.0
+        # 优雅停机时先摘除实例,等待在途请求完成的时长(毫秒,默认 10000)
+        # graceful-shutdown-wait-time: 10000
+
+  # ---------- 配置中心(需先添加 spring-cloud-starter-alibaba-nacos-config) ----------
+  # config:
+  #   import:
+  #     - optional:nacos:${spring.application.name}.yaml
+  #     - optional:nacos:${spring.application.name}-${spring.profiles.active:default}.yaml
+
+# ---------- Actuator(需先添加 spring-boot-starter-actuator) ----------
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+service-url:
+  nacos-user-service: http://nacos-provider
