@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.1.2</version>
+    <version>4.0.9</version>
     <relativePath/>
   </parent>
 
@@ -21,6 +21,7 @@
     <module>nacos-provider</module>
     <module>nacos-consumer</module>
     <module>nacos-consumer-openfeign</module>
+    <module>nacos-config</module>
   </modules>
 
   <properties>

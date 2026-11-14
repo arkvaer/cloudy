@@ -1,0 +1,46 @@
+server:
+  port: 7777
+
+spring:
+  application:
+    name: nacos-config-client
+  profiles:
+    active: dev
+
+  cloud:
+    refresh:
+      enabled: true
+      extra-refreshable: true
+    nacos:
+      # Nacos 服务器配置
+      server-addr: "${NACOS_SERVER_ADDR:127.0.0.1:8848}"
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:waver}
+
+      # 服务发现配置
+      discovery:
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+
+      # 配置中心配置
+      config:
+        # 命名空间
+        namespace: public
+        # 默认 group
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+        # 文件扩展名
+        file-extension: yaml
+        # ✅ 关键：启用配置自动刷新
+        refresh-enabled: true
+
+  # Spring Boot 2.4+ 配置导入方式（仅主配置）
+  config:
+    import:
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+      - optional:n
+
+# 暴露刷新端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
